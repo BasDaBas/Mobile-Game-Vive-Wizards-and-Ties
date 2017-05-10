@@ -10,7 +10,7 @@ public class PlayerPrefsManager : MonoBehaviour {
 
     public static void SetMasterVolume(float volume)
     {
-        if (volume > 0f && volume < 1) {
+        if (volume >= 0f && volume <= 1f) {
             PlayerPrefs.SetFloat(MASTER_VOLUME_KEY, volume);
         }  else {
             Debug.LogError("Master volume out of range!");
@@ -29,9 +29,14 @@ public class PlayerPrefsManager : MonoBehaviour {
         }
     }
 
+    public static void DeleteAllPreferences()
+    {
+        PlayerPrefs.DeleteAll();
+    }
+
     public static bool IsLevelUnlocked(int level) {
-        int levelValue = PlayerPrefs.GetInt(LEVEL_KEY + level.ToString());
-        bool IsLevelUnlocked = (levelValue == 1);
+        int levelValue = PlayerPrefs.GetInt(LEVEL_KEY + level.ToString()); //gets the Int from the given key
+        bool IsLevelUnlocked = (levelValue == 1); //if the given level value is 1 , islevelunlocked is true
         if (level <= SceneManager.sceneCountInBuildSettings - 1) {
             return IsLevelUnlocked;
         } else {
