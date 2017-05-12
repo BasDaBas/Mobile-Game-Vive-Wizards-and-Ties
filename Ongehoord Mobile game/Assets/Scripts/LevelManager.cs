@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Collections;
+using UnityEngine.UI;
+using System.Collections.Generic;
+using UnityEngine.EventSystems;
 
-public class LevelManager : MonoBehaviour {
+public class LevelManager : MonoBehaviour {    
 
     public float autoLoadNextLevelAfter;
 
@@ -11,26 +13,26 @@ public class LevelManager : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
         Debug.Log("Dont destroy on load: " + name);
 
-        if (autoLoadNextLevelAfter <= 0)
-        {
+        if (autoLoadNextLevelAfter <= 0) {
             Debug.Log("Level auto next disabled, Use a positive number in seconds");
-        }
-        else {
+        } else {
             Invoke("LoadNextLevel", autoLoadNextLevelAfter);
         }
     }
+    
 
     public void LoadLevel(string name){
 		Debug.Log ("New Level load: " + name);
-		SceneManager.LoadScene (name);
-        
+		SceneManager.LoadScene (name);        
 	}	
 
 	public void LoadNextLevel(){
         Debug.Log("LoadNextLevel Requested");
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);        
 	}
-    	
+
+    
+
     public void Quit()
     {
         //If we are running in a standalone build of the game

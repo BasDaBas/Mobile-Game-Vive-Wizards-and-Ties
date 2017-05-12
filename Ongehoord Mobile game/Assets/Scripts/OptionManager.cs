@@ -1,11 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class OptionManager : MonoBehaviour {
 
     public LevelManager levelManager;
+
+    public Sprite musicOnImage;
+    public Sprite musicOffImage;
+    public Button musicButton;
 
     private float volume;
 
@@ -29,7 +34,7 @@ public class OptionManager : MonoBehaviour {
         PlayerPrefsManager.SetMasterVolume(volume);
         Debug.Log("Save and Exit Called. Volume = " + volume);
 
-        levelManager.LoadLevel("01a Start Menu");        
+        SceneManager.LoadScene("01a Start Menu");        
     }
 
     public void ToggleMusic()
@@ -37,11 +42,14 @@ public class OptionManager : MonoBehaviour {
         if (volume == 0)  {
             volume = 1;
             musicManager.SetVolume(volume);
-            Debug.Log("Volume Not Muted");
+            musicButton.image.sprite = musicOnImage;
+            //not muted
+            
         } else  {
             volume = 0;
             musicManager.SetVolume(volume);
-            Debug.Log("Volume Muted");
+            musicButton.image.sprite = musicOffImage;
+            //muted
         }
         
     }

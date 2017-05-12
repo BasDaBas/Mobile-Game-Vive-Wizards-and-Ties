@@ -21,29 +21,31 @@ public class PlayerPrefsManager : MonoBehaviour {
         return PlayerPrefs.GetFloat(MASTER_VOLUME_KEY);
     }
 
-    public static void UnlockLevel(int level) {
-        if (level <= SceneManager.sceneCountInBuildSettings - 1) {
+    /*public static void UnlockLevel(int level) {
+        if (level <= SceneManager.sceneCountInBuildSettings - 1) { //checking of the level is actually in the build order.
             PlayerPrefs.SetInt(LEVEL_KEY + level.ToString(), 1); //use 1 for true since we can't use bools
         } else {
             Debug.LogError("Trying to unlock level not in build order");
         }
     }
+    
 
-    public static void DeleteAllPreferences()
+    public static bool IsLevelUnlocked(int level)
     {
-        PlayerPrefs.DeleteAll();
-    }
-
-    public static bool IsLevelUnlocked(int level) {
         int levelValue = PlayerPrefs.GetInt(LEVEL_KEY + level.ToString()); //gets the Int from the given key
         bool IsLevelUnlocked = (levelValue == 1); //if the given level value is 1 , islevelunlocked is true
+
         if (level <= SceneManager.sceneCountInBuildSettings - 1) {
             return IsLevelUnlocked;
         } else {
             Debug.LogError("Trying to query level not in build order");
             return false;
         }
-    }
+    }*/
 
+    public static void DeleteAllPreferences()
+    {
+        PlayerPrefs.DeleteAll();
+    }
 
 }

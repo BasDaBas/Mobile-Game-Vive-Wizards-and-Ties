@@ -5,12 +5,12 @@ using UnityEngine.SceneManagement;
 public class MusicManager : MonoBehaviour {
 
     public AudioClip[] levelMusicChangeArray;
+
     private AudioSource audioSource;
 
     void Awake()
     {        
         DontDestroyOnLoad(gameObject);
-        
         SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
