@@ -27,7 +27,6 @@ public class LevelSelect : MonoBehaviour {
 
     void Start ()
     {
-        //DeleteAll();
         FillList();
 	}
 
@@ -40,23 +39,19 @@ public class LevelSelect : MonoBehaviour {
             button.levelText.text = level.LevelText;
             
 
-            if (PlayerPrefs.GetInt("03 Level_" + button.levelText.text) == 1)
+            if (PlayerPrefs.GetInt("03 Level_" + button.levelText.text) == 1 )//check if the previous level is unlocked.
             {
                 level.Unlocked = 1;
                 level.IsInteractable = true;
             }
+           
 
             button.unlocked = level.Unlocked;
             button.GetComponent<Button>().interactable = level.IsInteractable;
-
             button.GetComponent<Button>().onClick.AddListener(() => LoadLevel(button));
-
-
-
-
             newbutton.transform.SetParent(Spacer, false);
 
-            if (PlayerPrefs.GetInt("03 Level_" + button.levelText.text + "_score") > 0)
+            if (PlayerPrefs.GetInt("03 Level_" + button.levelText.text + "_score") > 25)
             {
                 button.Star1.SetActive(true);
             }
@@ -69,9 +64,7 @@ public class LevelSelect : MonoBehaviour {
                 button.Star3.SetActive(true);
             }
 
-
             SaveAll();
-
         }
     }
 
@@ -92,11 +85,7 @@ public class LevelSelect : MonoBehaviour {
             }
         }        
     }
-
-    void DeleteAll()
-    {
-        PlayerPrefs.DeleteAll();
-    }
+        
 
     void LoadLevel(LevelButton button)
     {

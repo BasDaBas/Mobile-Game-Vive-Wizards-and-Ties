@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class OptionManager : MonoBehaviour {
 
-    public LevelManager levelManager;
 
     public Sprite musicOnImage;
     public Sprite musicOffImage;
@@ -20,7 +19,6 @@ public class OptionManager : MonoBehaviour {
 	void Start () {
         musicManager = GameObject.FindObjectOfType<MusicManager>();        
         volume = PlayerPrefsManager.GetMasterVolume();
-        Debug.Log("Start function checking volume; " + volume);
 	}
 	
 	// Update is called once per frame
@@ -32,13 +30,17 @@ public class OptionManager : MonoBehaviour {
     public void SaveAndExit()
     {
         PlayerPrefsManager.SetMasterVolume(volume);
-        Debug.Log("Save and Exit Called. Volume = " + volume);
-
         SceneManager.LoadScene("01a Start Menu");        
     }
 
     public void ToggleMusic()
     {
+
+        if (musicManager == null)
+        {
+            musicManager = GameObject.FindObjectOfType<MusicManager>();
+        }
+
         if (volume == 0)  {
             volume = 1;
             musicManager.SetVolume(volume);
