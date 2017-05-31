@@ -16,6 +16,7 @@ public class LevelSelect : MonoBehaviour {
     }
 
     public GameObject levelButton;
+    public GameObject levelButtonText;
     public Transform Spacer;
 
     public GameObject StartLevelPanel;
@@ -90,6 +91,7 @@ public class LevelSelect : MonoBehaviour {
     void LoadLevel(LevelButton button)
     {
         ToggleStartLevel();
+        levelButtonText.GetComponent<Text>().text = "Level " + button.levelText.text;
         StartLevelPanelButton.GetComponent<Button>().onClick.AddListener(() => SceneManager.LoadScene("03 Level_" + button.levelText.text));        
     }
 

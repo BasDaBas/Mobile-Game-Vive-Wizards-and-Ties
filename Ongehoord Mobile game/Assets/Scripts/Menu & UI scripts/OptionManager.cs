@@ -17,13 +17,25 @@ public class OptionManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        musicManager = GameObject.FindObjectOfType<MusicManager>();        
+        musicManager = GameObject.FindObjectOfType<MusicManager>();
+            
+
         volume = PlayerPrefsManager.GetMasterVolume();
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
         musicManager.SetVolume(volume);
+
+        if (volume ==0)
+        {
+            musicButton.image.sprite = musicOffImage;
+        }
+        else
+        {
+            musicButton.image.sprite = musicOnImage;
+        }
 	}
 
     //Function used for the back button in the options scene to make sure everything is saved.

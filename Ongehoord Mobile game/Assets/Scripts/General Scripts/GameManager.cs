@@ -11,19 +11,21 @@ public class GameManager : MonoBehaviour {
     private GameObject buttons;
 
     public GameObject PopUpMenuPanel;
-    public GameObject EndGamePanel;
+    public GameObject EndGamePanel; 
+
 
     public Text scoreText;
+    public Text inGameScoreText;
     public Text statusText;
+
     public int score;
+    public int coins;
 
 
     // Use this for initialization
     void Start () {              
 
         initialFixedDelta = Time.fixedDeltaTime;
-
-        LevelButton button = buttons.GetComponent<LevelButton>();
     }
 	
 	// Update is called once per frame
@@ -32,11 +34,8 @@ public class GameManager : MonoBehaviour {
 	}
 
     //Go To world Scene and unlocks the next level.
-    //TODO: Setup Score
     public void GoToWorldScene()
     {
-        PlayerPrefs.SetInt("03 Level_" + (SceneManager.GetActiveScene().buildIndex - 3) + "_score", score); //Used to give a score so we can test if the stars work.
-
         //Check if the score of the previous game is above 25(1 star) to unlock the next level
         if (PlayerPrefs.GetInt("03 Level_" +    (SceneManager.GetActiveScene().buildIndex - 3) + "_score") >= 25)// -3 to get the current buildindex
         {
@@ -46,24 +45,33 @@ public class GameManager : MonoBehaviour {
         else
         {
             Debug.Log("Not enough points scored to unlock the next level, Try again!");
-        }
-
-        
+        }       
         
         SceneManager.LoadScene(3); //load WorldScene
     }
 
-
+    
     public void WinCondtion()
     {
-        score = 75; 
+        //it will check the score (if there is one that has more points) so it wont give less points then you already had on this level.
+        if (PlayerPrefs.GetInt("03 Level_" + (SceneManager.GetActiveScene().buildIndex - 3) + "_score") <= score)
+        {
+            score = 75;//TODO: For Testing now, needs to be changed
+            PlayerPrefs.SetInt("03 Level_" + (SceneManager.GetActiveScene().buildIndex - 3) + "_score", score);
+        }        
         SetScoreText();
         EndGamePanel.SetActive(true);
     }
 
     public void LoseCondition()
     {
-        score = 15;
+        //it will check the score (if there is one that has more points) so it wont give less points then you already had on this level.
+        if (PlayerPrefs.GetInt("03 Level_" + (SceneManager.GetActiveScene().buildIndex - 3) + "_score") <= score)
+        {
+            score = 15;//TODO: For Testing now, needs to be changed
+            PlayerPrefs.SetInt("03 Level_" + (SceneManager.GetActiveScene().buildIndex - 3) + "_score", score);
+
+        }
         SetScoreText();
         EndGamePanel.SetActive(true);
     }
@@ -100,6 +108,7 @@ public class GameManager : MonoBehaviour {
         Time.fixedDeltaTime = initialFixedDelta;
 
         PopUpMenuPanel.SetActive(false);
+        
 
     }
 
@@ -115,4 +124,17 @@ public class GameManager : MonoBehaviour {
     {
         isPaused = pauseStatus;
     }
+
+    public void AddScore(int newScoreValue)
+    {
+        score += newScoreValue;
+        UpdateScore();
+    }
+
+    void UpdateScore()
+    {
+        inGameScoreText.text = "Score: " + score;
+    }
+
+    
 }
