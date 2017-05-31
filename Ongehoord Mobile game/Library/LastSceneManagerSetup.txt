@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/00 Splash Screen.unity
+- path: Assets/Scenes/TestSceneTies_PlayerCamera.unity
   isLoaded: 1
   isActive: 1
