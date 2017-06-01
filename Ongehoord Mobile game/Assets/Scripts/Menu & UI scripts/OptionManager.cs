@@ -13,22 +13,20 @@ public class OptionManager : MonoBehaviour {
 
     private float volume;
 
-    private MusicManager musicManager;
+    MusicManager musicManager;
 
 	// Use this for initialization
 	void Start () {
         musicManager = GameObject.FindObjectOfType<MusicManager>();
-            
-
-        volume = PlayerPrefsManager.GetMasterVolume();
+        
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
-        musicManager.SetVolume(volume);
+        
 
-        if (volume ==0)
+        if (volume == 0)
         {
             musicButton.image.sprite = musicOffImage;
         }
