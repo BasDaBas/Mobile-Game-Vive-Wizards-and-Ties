@@ -7,6 +7,7 @@ public class PlayerPrefsManager : MonoBehaviour {
 
     const string MASTER_VOLUME_KEY = "master_volume";
     const string LEVEL_KEY = "level_unlocked_";
+    const string UNLOCKABLE_KEY = "item unlocked";
 
     public static void SetMasterVolume(float volume)
     {
@@ -19,6 +20,16 @@ public class PlayerPrefsManager : MonoBehaviour {
 
     public static float GetMasterVolume() {
         return PlayerPrefs.GetFloat(MASTER_VOLUME_KEY);
+    }
+
+    public static void Unlockables(int unlockable)
+    {
+        PlayerPrefs.SetFloat(UNLOCKABLE_KEY, unlockable);
+    }
+
+    public static float GetUnlockables()
+    {
+        return PlayerPrefs.GetFloat(UNLOCKABLE_KEY);
     }
 
     /*public static void UnlockLevel(int level) {
