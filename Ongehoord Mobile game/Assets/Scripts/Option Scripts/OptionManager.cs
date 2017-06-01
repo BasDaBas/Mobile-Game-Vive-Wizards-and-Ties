@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Analytics;
 
 public class OptionManager : MonoBehaviour {
 
@@ -66,6 +67,18 @@ public class OptionManager : MonoBehaviour {
             //muted
         }
         
+    }
+
+    public void profilePlayer()
+    {
+        Gender gender = Gender.Female;
+        // Use this call to designate the user gender
+        Analytics.SetUserGender(gender);
+        int birthYear = 1994;
+        Debug.Log(birthYear);
+        // Use this call to designate the user birth year
+        Analytics.SetUserBirthYear(birthYear);
+
     }
 
     public void ResetGame()

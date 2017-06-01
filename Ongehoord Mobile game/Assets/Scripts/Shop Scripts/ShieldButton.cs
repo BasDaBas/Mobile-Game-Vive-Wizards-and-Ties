@@ -10,25 +10,21 @@ namespace CompleteProject
         public Player player;
         public int shieldNumber;
 
-        public Text name;
+        public Text ItemName;
         public Text cost;
         public Text description;
-
-        private AudioSource source;
 
 
         // Use this for initialization
         void Start()
         {
-            source = GetComponent<AudioSource>();
             SetButton();
             
         }
 
         void SetButton()
         {
-            string costString = player.shields[shieldNumber].cost.ToString();
-            name.text = player.shields[shieldNumber].itemName;
+            ItemName.text = player.shields[shieldNumber].itemName;
             cost.text = "$" + player.shields[shieldNumber].cost.ToString();
             description.text = player.shields[shieldNumber].description;
 

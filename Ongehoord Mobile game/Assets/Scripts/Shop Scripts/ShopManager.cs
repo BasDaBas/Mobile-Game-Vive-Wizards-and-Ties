@@ -8,6 +8,7 @@ namespace CompleteProject
     public class ShopManager : MonoBehaviour
     {
         public static int coins;
+
         public Text textCoins;
 
         private bool panelOpen;

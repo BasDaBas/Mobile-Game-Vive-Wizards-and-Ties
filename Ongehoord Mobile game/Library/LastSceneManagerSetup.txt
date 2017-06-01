@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scenes/02b Shop Menu.unity
+- path: Assets/Scenes/00 Splash Screen.unity
   isLoaded: 1
   isActive: 1
