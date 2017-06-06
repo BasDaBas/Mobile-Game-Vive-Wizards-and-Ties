@@ -1,8 +1,4 @@
 sceneSetups:
-<<<<<<< HEAD
-- path: Assets/Scenes/03 Level_1.unity
-=======
-- path: Assets/Scenes/00 Splash Screen.unity
->>>>>>> 66af73210afa52b1a2a9320729dd3c1f99e0d9dc
+- path: Assets/Scenes/03 Level_3.unity
   isLoaded: 1
   isActive: 1
