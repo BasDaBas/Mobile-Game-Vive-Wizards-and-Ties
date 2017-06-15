@@ -8,37 +8,67 @@ using UnityEngine.Analytics;
 namespace CompleteProject
 {
     public class GameManager : MonoBehaviour
-    {
-
-        
+    {        
         private bool isPaused;
+        public bool gameIsPlaying;
         private float initialFixedDelta;
         private GameObject buttons;
 
+        [Header("PopUp Menu Visuals")]
         public GameObject PopUpMenuPanel;
-        public GameObject EndGamePanel;
-
-
+        public GameObject EndGamePanel;        
         public Text scoreText;
         public Text inGameScoreText;
+        public Text inGameTimeText;
         public Text statusText;
+        public GameObject[] starsUnlocked;
 
+        [HideInInspector]
         public static int score;
+
         private int coinsEarned;
         private int starsEarned;
 
+        [Header("Start Game visuals")]
+        public SpawningObjects spawningObjects;
+        public float timeLeft = 20;
+        public GameObject countdownPanel;
+
+        public  int totalNotesHit;
+        public  int totalNotes;
 
         // Use this for initialization
         void Start()
         {
-
+            spawningObjects = spawningObjects.GetComponent<SpawningObjects>();
             initialFixedDelta = Time.fixedDeltaTime;
         }
 
         // Update is called once per frame
         void Update()
         {
+            if (gameIsPlaying == true)
+            {
+                timeLeft -= Time.deltaTime;
+                if (timeLeft < 2)// stop spawning notes in the last 2 sec
+                {                    
+                    spawningObjects.gameRunning = false;//Game Ended                   
+                }
+                if (timeLeft < 0)
+                {
+                    gameIsPlaying = false;
+                    SetEndGamePanel();
+                    
+                }
+            }
 
+            inGameTimeText.text = "Time: " + Mathf.Round(timeLeft);
+        }
+
+        public void StartGame(GameObject startGameButton)
+        {
+            countdownPanel.SetActive(true);
+            startGameButton.SetActive(false);
         }
 
         //Go To world Scene and unlocks the next level.
@@ -59,36 +89,34 @@ namespace CompleteProject
         }
 
 
-        public void WinLoseCondtion(bool won)
+        public void EndGameCondition(int coins, int stars)
         {
             int currentLevel = SceneManager.GetActiveScene().buildIndex - 4; // -4 because there are 4 scenes before this
-            string worldScore = "03 Level_" + currentLevel + "_score";
+            string _worldScore = "03 Level_" + currentLevel + "_score";
+            string _stars = "03 Level_" + currentLevel + "_stars";
 
-            if (won == true) {                
-                //it will check the score (if there is one that has more points) so it wont give less points then you already had on this level.
-                if (PlayerPrefs.GetInt(worldScore) <= score)
-                {
-                    score = 75;//TODO: For Testing now, needs to be changed
-                    coinsEarned = 10;
-                    starsEarned = 2;
-                    ShopManager.coins += coinsEarned;
-                    PlayerPrefs.SetInt(worldScore, score);
-                }
-                else {
-                    score = PlayerPrefs.GetInt(worldScore);
-                } 
-            }
-            else {
-                //it will check the score (if there is one that has more points) so it wont give less points then you already had on this level.
-                if (PlayerPrefs.GetInt(worldScore) <= score)
-                {
-                    score = 15;//TODO: For Testing now, needs to be changed
-                    coinsEarned = 2;
-                    starsEarned = 0;
-                    PlayerPrefs.SetInt(worldScore, score);
+            //it will check the score (if there is one that has more points) so it wont give less points then you already had on this level.
+            Debug.Log(PlayerPrefs.GetInt(_worldScore));
+            Debug.Log(score);
+            if (PlayerPrefs.GetInt(_worldScore) <= score)//means you have more points now than previous play
+            {
+                coinsEarned = coins;
+                starsEarned = stars;
+                ShopManager.coins += coinsEarned;
+                PlayerPrefs.SetInt(_worldScore, score);
+                PlayerPrefs.SetInt(_stars, stars);
 
-                }
             }
+            else//if the player had less points than previous score
+            {
+                coinsEarned = coins;
+            }
+            //changes the opacity of the stars based on how many stars are unlocked
+            for (int i = 0; i < stars; i++) {
+                starsUnlocked[i].SetActive(true);
+
+            }
+
 
             //storing the score, coinsEarned and starEarned into the Unity Analatyics
             Analytics.CustomEvent("Game Completed", new Dictionary<string, object>
@@ -99,23 +127,44 @@ namespace CompleteProject
                 { "Stars", starsEarned}
             });
 
-            SetScoreText();
             EndGamePanel.SetActive(true);
         }
-      
 
-        void SetScoreText()
+        public void SetEndGamePanel()
         {
-            scoreText.text = "Score: " + score.ToString();
-            if (score >= 25)
+            //Condition 1 (3 stars)
+            if (totalNotesHit >= (totalNotes / 5) * 4)
             {
+                EndGameCondition(totalNotesHit * 1, 3);
+                statusText.text = "Amazing!";                
+                
+            }
+            //Condition 2 (2 stars)
+            else if (totalNotesHit < (totalNotes / 5) * 4 && totalNotesHit > (totalNotes / 5) * 3)
+            {
+                EndGameCondition(totalNotesHit * 1, 2);
                 statusText.text = "Good Job!";
             }
-            else if (score <= 24)
+            // Condition 3 (1 star)
+            else if (totalNotesHit < totalNotes / 5 * 3 && totalNotesHit > (totalNotes / 5) * 2)
             {
+                EndGameCondition(totalNotesHit * 1, 1);
+                statusText.text = "Well done!";
+            }
+            else
+            {
+                EndGameCondition(totalNotesHit * 1, 0);
                 statusText.text = "Try Again!";
             }
-        }
+
+            scoreText.text = "Score: " + score.ToString();
+            
+
+            //reset
+            totalNotes = 0;
+            totalNotesHit = 0;
+            score = 0;
+        }             
 
 
         public void PopOpMenu()

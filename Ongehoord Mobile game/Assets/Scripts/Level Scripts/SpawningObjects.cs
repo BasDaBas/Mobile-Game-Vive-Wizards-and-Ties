@@ -2,65 +2,81 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpawningObjects : MonoBehaviour {
+namespace CompleteProject
+{
+    public class SpawningObjects : MonoBehaviour {
 
-    public GameObject Note;
-    private float maxTime = 6;
-    private float minTime = 2;
-    private float time;
+        public bool gameRunning = false;
+        public float spawnedNotes;
 
-    private float spawnTime;
+        public GameObject Note;
+        public GameObject[] SpawnPoints;
+        private float maxTime = 2f;
+        private float minTime = 0.5f;
+        private float time;
 
-    public List<GameObject> notes = new List<GameObject>();
+        int location;
 
-    void Start()
-    {
-        SetTimer();
-        time = minTime;
-        
-        
-    }
-    void FixedUpdate()
-    {
-        time += Time.deltaTime;
-        if(time > spawnTime)
+        private float spawnTime;
+
+        public List<GameObject> notes = new List<GameObject>();
+
+        public GameManager gameManager;
+
+        void Start()
         {
-            SpawnNote();
-           
-            SetTimer();            
-         
+            gameManager = gameManager.GetComponent<GameManager>();
+
+            SetTimer();
+            time = minTime;
+
+
         }
-    }
-
-    public GameObject GetNote()
-    {
-   
-        for (int i = 0; i < notes.Count; i++)
+        void FixedUpdate()
         {
-            if (!notes[i].activeInHierarchy)
+            if (gameRunning == true)
             {
-                notes[i].SetActive(true);
-                return notes[i];
+                time += Time.deltaTime;
+                if (time > spawnTime)
+                {
+                    SpawnNote();
+                    gameManager.totalNotes++; //to track how many notes are spawned total in the game.
+                    SetTimer();
+
+                } 
             }
         }
-        GameObject go = Instantiate(Note, transform.position, Quaternion.identity);
-        notes.Add(go);
-        return go;
+
+        public GameObject GetNote()
+        {
+
+            for (int i = 0; i < notes.Count; i++)
+            {
+                if (!notes[i].activeInHierarchy)
+                {
+                    notes[i].transform.position = SpawnPoints[location].transform.position;
+                    notes[i].SetActive(true);
+                    return notes[i];
+                }
+            }
+            GameObject go = Instantiate(Note, SpawnPoints[location].transform.position, Quaternion.identity);
+            notes.Add(go);
+            return go;
+        }
+
+        public void SpawnNote()
+        {
+            location = Random.Range(0, SpawnPoints.Length);
+            GameObject god = GetNote();
+            time = 0;
+
+        }
+        void SetTimer()
+        {
+            spawnTime = Random.Range(minTime, maxTime);
+        }
+
+
+
     }
-
-    void SpawnNote()
-    {
-        GameObject god = GetNote();
-        Debug.Log(spawnTime);
-        time = 0;
-        
-    }
-    void SetTimer()
-    {
-        spawnTime = Random.Range(minTime, maxTime);
-    }
-
-  
-
-
 }

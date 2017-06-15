@@ -23,7 +23,7 @@ public class RepeatingBackground : MonoBehaviour {
 
     private void RepostitionBackground()
     {
-        Vector2 backgroundOffset = new Vector2(backgroundHorizontalLength * 4f, 0);
+        Vector2 backgroundOffset = new Vector2(backgroundHorizontalLength * 2f, 0);
         transform.position = (Vector2)transform.position + backgroundOffset;
     }
 }

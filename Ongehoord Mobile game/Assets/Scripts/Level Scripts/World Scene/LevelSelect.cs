@@ -52,15 +52,17 @@ public class LevelSelect : MonoBehaviour {
             button.GetComponent<Button>().onClick.AddListener(() => LoadLevel(button));
             newbutton.transform.SetParent(Spacer, false);
             //based on the points it will unlock stars
-            if (PlayerPrefs.GetInt("03 Level_" + button.levelText.text + "_score") > 25)
+            string stars = "03 Level_" + button.levelText.text + "_stars";
+
+            if (PlayerPrefs.GetInt(stars) >= 1)
             {
-                button.Star1.SetActive(true);
+                button.Star1.SetActive(true);                
             }
-            if (PlayerPrefs.GetInt("03 Level_" + button.levelText.text + "_score") >= 50)
+            if (PlayerPrefs.GetInt(stars) >= 2)
             {
                 button.Star2.SetActive(true);
             }
-            if (PlayerPrefs.GetInt("03 Level_" + button.levelText.text + "_score") >= 100)
+            if (PlayerPrefs.GetInt(stars) == 3)
             {
                 button.Star3.SetActive(true);
             }

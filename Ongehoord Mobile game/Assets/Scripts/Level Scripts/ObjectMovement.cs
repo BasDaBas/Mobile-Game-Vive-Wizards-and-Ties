@@ -2,43 +2,68 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectMovement : MonoBehaviour {
+namespace CompleteProject
+{
+    public class ObjectMovement : MonoBehaviour
+    {
 
-    public bool Touchable;
-    public Transform PlayerPos;
-    public Transform SpawnPos;
-    public float TransSpeed;
-    RaycastHit hit;
-    float point = 100;
-    Ray ray;
-    bool gekke = true;
+        public bool touchable;
+        public Transform playerPos;
+        private Transform storage;
+        // public Transform SpawnPos;
+        public float transSpeed;
+        RaycastHit hit;
+        float point = 100;
+        Ray ray;
+        private GameManager gameManager;
 
+        public bool touched = false;
 
-    // Update is called once per frame
-    void Update() {
-        if(Input.touchCount> 0 && Input.GetTouch(0).phase == TouchPhase.Began && Touchable == true)
+        void Start()
         {
-            ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-            if (Physics.Raycast(ray, out hit, point))
+            gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
+            storage = GameObject.Find("Storage").GetComponent<Transform>();
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+            if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began && touchable == true)
             {
-                Debug.Log(gameObject.name);
                 
-                
+                ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+                if (Physics.Raycast(ray, out hit, point) && touched == false)
+                {
+                    Debug.Log(gameObject.name + "Destroyed");                    
+                    gameManager.AddScore(10);
+                    gameManager.totalNotesHit++;
+                    gameObject.transform.position = storage.position;
+                    gameObject.SetActive(false);
+                    touchable = false;
+                    gameObject.GetComponent<Renderer>().material.shader = Shader.Find("Diffuse");
+
+                }
+
                 
             }
-        }               
-         
-        float step = TransSpeed * Time.deltaTime;
-        transform.position = Vector3.MoveTowards(transform.position, PlayerPos.position, step);	
 
-        if(transform.position == PlayerPos.position)
-        {
-            transform.position = SpawnPos.position;
-            gameObject.SetActive(false);
-            
-            
+            float step = transSpeed * Time.deltaTime;
+            transform.position = Vector3.MoveTowards(transform.position,playerPos.position, step);
+
+            //For Testing
+            if (transform.position == playerPos.position)
+            {
+                transform.position = storage.position;
+                touchable = false;
+                gameObject.GetComponent<Renderer>().material.shader = Shader.Find("Diffuse");
+                gameObject.SetActive(false);
+            }            
         }
-	}
 
-    
+        public void SwapRenderer()
+        {
+            gameObject.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+        }
+    }    
 }
+
