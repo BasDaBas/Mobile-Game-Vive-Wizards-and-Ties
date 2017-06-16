@@ -19,10 +19,19 @@ namespace CompleteProject
 
         public bool touched = false;
 
+        public Shader hightlightShader;
+
         void Start()
         {
             gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
             storage = GameObject.Find("Storage").GetComponent<Transform>();
+
+            var lookDir = playerPos.position - transform.position;
+            lookDir.y = 90; // keep only the horizontal direction
+            transform.rotation = Quaternion.LookRotation(lookDir);
+
+            gameObject.GetComponentInParent<alive>().noteIsAlive = true;
+
         }
 
         // Update is called once per frame
@@ -39,6 +48,7 @@ namespace CompleteProject
                     gameManager.totalNotesHit++;
                     gameObject.transform.position = storage.position;
                     gameObject.SetActive(false);
+                    gameObject.GetComponentInParent<alive>().noteIsAlive = false;
                     touchable = false;
                     gameObject.GetComponent<Renderer>().material.shader = Shader.Find("Diffuse");
 
@@ -55,6 +65,7 @@ namespace CompleteProject
             {
                 transform.position = storage.position;
                 touchable = false;
+                gameObject.GetComponentInParent<alive>().noteIsAlive = false;
                 gameObject.GetComponent<Renderer>().material.shader = Shader.Find("Diffuse");
                 gameObject.SetActive(false);
             }            
@@ -62,7 +73,7 @@ namespace CompleteProject
 
         public void SwapRenderer()
         {
-            gameObject.GetComponent<Renderer>().material.shader = Shader.Find("Self-Illumin/Outlined Diffuse");
+            gameObject.GetComponent<Renderer>().material.shader = hightlightShader;  
         }
     }    
 }

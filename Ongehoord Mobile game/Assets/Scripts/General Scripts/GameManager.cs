@@ -50,7 +50,7 @@ namespace CompleteProject
             if (gameIsPlaying == true)
             {
                 timeLeft -= Time.deltaTime;
-                if (timeLeft < 2)// stop spawning notes in the last 2 sec
+                if (timeLeft < 2.5)// stop spawning notes in the last 2 sec
                 {                    
                     spawningObjects.gameRunning = false;//Game Ended                   
                 }

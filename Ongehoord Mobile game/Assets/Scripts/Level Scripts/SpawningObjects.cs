@@ -9,19 +9,17 @@ namespace CompleteProject
         public bool gameRunning = false;
         public float spawnedNotes;
 
-        public GameObject Note;
+        public GameObject[] Notes;
         public GameObject[] SpawnPoints;
         private float maxTime = 2f;
         private float minTime = 0.5f;
         private float time;
-
         int location;
-
         private float spawnTime;
-
         public List<GameObject> notes = new List<GameObject>();
 
         public GameManager gameManager;
+        public OffScreenIndicator offScreenIndicator;
 
         void Start()
         {
@@ -50,16 +48,20 @@ namespace CompleteProject
         public GameObject GetNote()
         {
 
+            int r = Random.Range(0, Notes.Length);
+
             for (int i = 0; i < notes.Count; i++)
             {
                 if (!notes[i].activeInHierarchy)
                 {
                     notes[i].transform.position = SpawnPoints[location].transform.position;
                     notes[i].SetActive(true);
+                    notes[i].GetComponent<alive>().noteIsAlive = true;
+
                     return notes[i];
                 }
             }
-            GameObject go = Instantiate(Note, SpawnPoints[location].transform.position, Quaternion.identity);
+            GameObject go = Instantiate(Notes[r], SpawnPoints[location].transform.position, Quaternion.identity);
             notes.Add(go);
             return go;
         }
@@ -75,8 +77,5 @@ namespace CompleteProject
         {
             spawnTime = Random.Range(minTime, maxTime);
         }
-
-
-
     }
 }
