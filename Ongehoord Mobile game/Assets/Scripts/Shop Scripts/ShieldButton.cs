@@ -32,21 +32,39 @@ namespace CompleteProject
 
         public void OnClick()
         {
-            if (ShopManager.coins >= player.shields[shieldNumber].cost )//if we have enough coins to buy the item
+            if (gameObject.tag == "Shield")
             {
-                Debug.Log("Enough Money to buy item");
-                ShopManager.coins -= player.shields[shieldNumber].cost;//take the money
-                PlayerPrefsManager.Unlockables(shieldNumber);//set the unlocked item in the prefs manager
-                player.currentShield = shieldNumber;//equip the item
+                if (ShopManager.coins >= player.shields[shieldNumber].cost)//if we have enough coins to buy the item
+                {
+                    Debug.Log("Enough Money to buy item");
+                    ShopManager.coins -= player.shields[shieldNumber].cost;//take the money
+                    PlayerPrefsManager.Unlockables(shieldNumber);//set the unlocked item in the prefs manager
+                    player.currentShield = shieldNumber;//equip the item
+                }
+                else
+                {
+                    Debug.Log("Not enough Money");
+                }
             }
             else
             {
-                Debug.Log("Not enough Money");
+                if (ShopManager.coins >= player.shields[shieldNumber].cost)//if we have enough coins to buy the item
+                {
+                    PlayerPrefsManager.AddEarplugs(); //Adds an earplug 
+                    ShopManager.coins -= player.shields[shieldNumber].cost;//take the money
+                    ShopManager.earplugs++;
+                    Debug.Log("Bought Earplug");
+                }
+                else
+                {
+                    Debug.Log("Not enough Money");
+                }
             }
-        }
+            
+        }        
 
-        // Update is called once per frame
-        void Update()
+            // Update is called once per frame
+            void Update()
         {
 
         }

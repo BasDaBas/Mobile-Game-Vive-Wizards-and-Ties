@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 public class MusicManager : MonoBehaviour {
 
@@ -34,5 +35,6 @@ public class MusicManager : MonoBehaviour {
     public void SetVolume(float volume)
     {
         audioSource.volume = volume;
+
     }
 }

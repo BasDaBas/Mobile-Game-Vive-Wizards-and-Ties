@@ -26,16 +26,15 @@ public class OptionManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        Debug.Log(volume);
+
         if (volume <= 0)
         {
             musicButton.image.sprite = musicOffImage;
-            Debug.Log("music off");
+
         }
         else if (volume >= 0)
         {
             musicButton.image.sprite = musicOnImage;
-            Debug.Log("music On");
 
         }
     }

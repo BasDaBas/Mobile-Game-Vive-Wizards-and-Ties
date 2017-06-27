@@ -21,7 +21,9 @@ namespace CompleteProject
         public Text inGameScoreText;
         public Text inGameTimeText;
         public Text statusText;
+        public Text cochleaDamage;
         public GameObject[] starsUnlocked;
+        public Image cochlea;
 
         [HideInInspector]
         public static int score;
@@ -31,17 +33,28 @@ namespace CompleteProject
 
         [Header("Start Game visuals")]
         public SpawningObjects spawningObjects;
-        public float timeLeft = 20;
+        public float playTime;
         public GameObject countdownPanel;
 
-        public  int totalNotesHit;
-        public  int totalNotes;
+        public int totalNotesHit;
+        public int totalNotes;
+        public float cochleaHealth;
+        private float cochleaSpeed = 1;
+
+        private GameObject musicManager;
 
         // Use this for initialization
         void Start()
         {
             spawningObjects = spawningObjects.GetComponent<SpawningObjects>();
+            musicManager = GameObject.Find("MusicManager");
+            musicManager.SetActive(false);
             initialFixedDelta = Time.fixedDeltaTime;
+
+            cochleaHealth = 100;
+            cochleaDamage.text = cochleaHealth + "%";
+
+                       
         }
 
         // Update is called once per frame
@@ -49,20 +62,27 @@ namespace CompleteProject
         {
             if (gameIsPlaying == true)
             {
-                timeLeft -= Time.deltaTime;
-                if (timeLeft < 2.5)// stop spawning notes in the last 2 sec
+                playTime -= Time.deltaTime;
+                if (playTime < 4)// stop spawning notes in the last 4 sec to make sure there is no note when the game is already ended.
                 {                    
                     spawningObjects.gameRunning = false;//Game Ended                   
                 }
-                if (timeLeft < 0)
+                if (playTime < 0)
                 {
                     gameIsPlaying = false;
-                    SetEndGamePanel();
-                    
+                    SetEndGamePanel(false);                    
+                }
+                if (cochleaHealth == 0)
+                {
+                    gameIsPlaying = false;
+                    SetEndGamePanel(true);
+
+                    Time.timeScale = 0;
+                    Time.fixedDeltaTime = 0;
                 }
             }
 
-            inGameTimeText.text = "Time: " + Mathf.Round(timeLeft);
+            inGameTimeText.text = "Time: " + Mathf.Round(playTime);
         }
 
         public void StartGame(GameObject startGameButton)
@@ -85,6 +105,13 @@ namespace CompleteProject
                 Debug.Log("Not enough points scored to unlock the next level, Try again!");
             }
 
+            if (Time.timeScale == 0 || Time.fixedDeltaTime == 0) 
+            {
+                Time.timeScale = 1;
+                Time.fixedDeltaTime = 1;
+            }
+            
+
             SceneManager.LoadScene(3); //load WorldScene
         }
 
@@ -96,8 +123,6 @@ namespace CompleteProject
             string _stars = "03 Level_" + currentLevel + "_stars";
 
             //it will check the score (if there is one that has more points) so it wont give less points then you already had on this level.
-            Debug.Log(PlayerPrefs.GetInt(_worldScore));
-            Debug.Log(score);
             if (PlayerPrefs.GetInt(_worldScore) <= score)//means you have more points now than previous play
             {
                 coinsEarned = coins;
@@ -130,32 +155,41 @@ namespace CompleteProject
             EndGamePanel.SetActive(true);
         }
 
-        public void SetEndGamePanel()
+        public void SetEndGamePanel(bool gameover)
         {
-            //Condition 1 (3 stars)
-            if (totalNotesHit >= (totalNotes / 5) * 4)
+
+            if (gameover)
             {
-                EndGameCondition(totalNotesHit * 1, 3);
-                statusText.text = "Amazing!";                
-                
-            }
-            //Condition 2 (2 stars)
-            else if (totalNotesHit < (totalNotes / 5) * 4 && totalNotesHit > (totalNotes / 5) * 3)
-            {
-                EndGameCondition(totalNotesHit * 1, 2);
-                statusText.text = "Good Job!";
-            }
-            // Condition 3 (1 star)
-            else if (totalNotesHit < totalNotes / 5 * 3 && totalNotesHit > (totalNotes / 5) * 2)
-            {
-                EndGameCondition(totalNotesHit * 1, 1);
-                statusText.text = "Well done!";
+                EndGameCondition(Mathf.RoundToInt(totalNotesHit / 4), 0);
+                statusText.text = "Try Again!";
             }
             else
             {
-                EndGameCondition(totalNotesHit * 1, 0);
-                statusText.text = "Try Again!";
-            }
+                //Condition 1 (3 stars)
+                if (totalNotesHit >= (totalNotes / 5) * 4)
+                {
+                    EndGameCondition(Mathf.RoundToInt(totalNotesHit / 4), 3);
+                    statusText.text = "Amazing!";
+
+                }
+                //Condition 2 (2 stars)
+                else if (totalNotesHit < (totalNotes / 5) * 4 && totalNotesHit > (totalNotes / 5) * 3)
+                {
+                    EndGameCondition(Mathf.RoundToInt(totalNotesHit / 4), 2);
+                    statusText.text = "Good Job!";
+                }
+                // Condition 3 (1 star)
+                else if (totalNotesHit < totalNotes / 5 * 3 && totalNotesHit > (totalNotes / 5) * 2)
+                {
+                    EndGameCondition(Mathf.RoundToInt(totalNotesHit / 4), 1);
+                    statusText.text = "Well done!";
+                }
+                else
+                {
+                    EndGameCondition(Mathf.RoundToInt(totalNotesHit / 4), 0);
+                    statusText.text = "Try Again!";
+                }
+            }          
 
             scoreText.text = "Score: " + score.ToString();
             
@@ -172,11 +206,13 @@ namespace CompleteProject
             if (isPaused)
             {
                 isPaused = false;
+                musicManager.GetComponent<AudioSource>().Play();
                 ResumeGame();
             }
             else if (!isPaused)
             {
                 isPaused = true;
+                musicManager.GetComponent<AudioSource>().Pause();
                 PauseGame();
             }
         }
@@ -214,6 +250,37 @@ namespace CompleteProject
         void UpdateScore()
         {
             inGameScoreText.text = "Score: " + score;
+        }
+
+        public void StartMusic()
+        {
+            musicManager.SetActive(true);
+            playTime = musicManager.GetComponent<AudioSource>().clip.length;
+            
+            Debug.Log("Cochleahealth = " + cochleaHealth);
+            Debug.Log("Song is playing");
+        }
+
+        public void takeDamage()
+        {
+            cochlea.fillAmount -= 0.04f;
+            cochleaHealth -= 4f;
+            cochleaDamage.text = cochleaHealth + "%";
+        }
+
+        public void LoadWorldScene()
+        {
+            
+            Time.timeScale = 1f;
+            Time.fixedDeltaTime = initialFixedDelta;       
+
+            
+            musicManager.SetActive(true);
+           
+            
+
+            SceneManager.LoadScene("02a World Scene");
+
         }
 
 

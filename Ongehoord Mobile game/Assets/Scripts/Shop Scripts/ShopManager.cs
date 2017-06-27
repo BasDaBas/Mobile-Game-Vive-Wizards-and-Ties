@@ -7,9 +7,11 @@ namespace CompleteProject
 {
     public class ShopManager : MonoBehaviour
     {
-        public static int coins;
+        public static int coins = 0;
+        public static int earplugs;
 
         public Text textCoins;
+        public Text textEarplugs;
 
         private bool panelOpen;
 
@@ -27,6 +29,7 @@ namespace CompleteProject
         {
             // Set the displayed text to be the word "Score" followed by the score value.
             textCoins.text = coins.ToString();
+            textEarplugs.text = earplugs.ToString();
         }
 
         public void OpenShopPanel()

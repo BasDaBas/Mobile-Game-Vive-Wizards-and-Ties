@@ -11,7 +11,7 @@ public class LevelManager : MonoBehaviour {
     void Awake()
     {
         DontDestroyOnLoad(gameObject);
-        Debug.Log("Dont destroy on load: " + name);
+
 
         if (autoLoadNextLevelAfter <= 0) {
             Debug.Log("Level auto next disabled, Use a positive number in seconds");
@@ -22,13 +22,13 @@ public class LevelManager : MonoBehaviour {
     
 
     public void LoadLevel(string name){
-		Debug.Log ("New Level load: " + name);
+
 		SceneManager.LoadScene (name);  
               
 	}	
 
 	public void LoadNextLevel(){
-        Debug.Log("LoadNextLevel Requested");
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);        
 	}
 

@@ -48,12 +48,13 @@ namespace CompleteProject{
             {
                 if (notes.GetComponent<alive>().noteIsAlive == true)
                 {
-                    AddIndicator(notes.GetComponentInChildren<Transform>().transform, 0);//0 because there is no ID?
+                    AddIndicator(notes.GetComponent<Transform>().transform, 0);//0 because there is no ID?
 
                 }
                 else if (notes.GetComponent<alive>().noteIsAlive == false)
                 {
-                    RemoveIndicator(notes.GetComponentInChildren<Transform>().transform);
+                    Debug.Log("Remove Indicator");
+                    RemoveIndicator(notes.GetComponent<Transform>().transform);
                 }                             
             }           
         }

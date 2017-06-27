@@ -42,10 +42,10 @@ namespace CompleteProject
 				screenScaled = true;
 				screenScaled = false;
 
-				Debug.Log("ReferenceResolution = " + referenceResolution.ToString());
+				/*Debug.Log("ReferenceResolution = " + referenceResolution.ToString());
 				Debug.Log("ScreenResolution = " + screenResolution.ToString());
 				Debug.Log("ScreenScaleX = " + screenScaleX.ToString());
-				Debug.Log("ScreenScaleY = " + screenScaleY.ToString());
+				Debug.Log("ScreenScaleY = " + screenScaleY.ToString());*/
 			} else {
 				screenScaled = false;
 			}
@@ -83,6 +83,7 @@ namespace CompleteProject
 				newArrowIndicator.arrow.GetComponent<Image>().sprite = newArrowIndicator.indicator.offScreenSprite;
 				newArrowIndicator.arrow.GetComponent<RectTransform>().sizeDelta = new Vector2(indicatorSize, indicatorSize);
 				newArrowIndicator.arrow.GetComponent<Image>().color = newArrowIndicator.indicator.offScreenColor;
+                newArrowIndicator.arrow.GetComponent<Image>().raycastTarget = false;
 				if(!newArrowIndicator.indicator.showOffScreen){
 					newArrowIndicator.arrow.SetActive(false);
 				}
@@ -90,6 +91,7 @@ namespace CompleteProject
 				arrowIndicators.Add(newArrowIndicator);
 			} else {
 				Debug.LogWarning ("Target already added: " + target.name);
+                
 			}
 		}
 

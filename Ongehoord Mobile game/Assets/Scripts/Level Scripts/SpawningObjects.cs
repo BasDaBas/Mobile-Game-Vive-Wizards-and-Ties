@@ -11,15 +11,17 @@ namespace CompleteProject
 
         public GameObject[] Notes;
         public GameObject[] SpawnPoints;
-        private float maxTime = 2f;
-        private float minTime = 0.5f;
+
+        [Header("Min and Max time before a note spawns")]
+        public float maxTime = 2f;
+        public float minTime = 1.0f;
+
         private float time;
         int location;
         private float spawnTime;
         public List<GameObject> notes = new List<GameObject>();
 
         public GameManager gameManager;
-        public OffScreenIndicator offScreenIndicator;
 
         void Start()
         {
@@ -47,15 +49,16 @@ namespace CompleteProject
 
         public GameObject GetNote()
         {
-
             int r = Random.Range(0, Notes.Length);
 
             for (int i = 0; i < notes.Count; i++)
             {
-                if (!notes[i].activeInHierarchy)
+                if (!notes[i].gameObject.transform.GetChild(0).gameObject.activeInHierarchy)
                 {
+                    Debug.Log("Note not active in scene");
                     notes[i].transform.position = SpawnPoints[location].transform.position;
-                    notes[i].SetActive(true);
+                    notes[i].gameObject.transform.GetChild(0).transform.position = SpawnPoints[location].transform.position;
+                    notes[i].gameObject.transform.GetChild(0).gameObject.SetActive(true);
                     notes[i].GetComponent<alive>().noteIsAlive = true;
 
                     return notes[i];

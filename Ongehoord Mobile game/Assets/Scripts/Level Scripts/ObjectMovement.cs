@@ -43,14 +43,15 @@ namespace CompleteProject
                 ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
                 if (Physics.Raycast(ray, out hit, point) && touched == false)
                 {
-                    Debug.Log(gameObject.name + "Destroyed");                    
+                    
+                    gameObject.GetComponentInParent<alive>().noteIsAlive = false;
                     gameManager.AddScore(10);
                     gameManager.totalNotesHit++;
                     gameObject.transform.position = storage.position;
                     gameObject.SetActive(false);
-                    gameObject.GetComponentInParent<alive>().noteIsAlive = false;
                     touchable = false;
                     gameObject.GetComponent<Renderer>().material.shader = Shader.Find("Diffuse");
+                    
 
                 }
 
@@ -60,14 +61,18 @@ namespace CompleteProject
             float step = transSpeed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position,playerPos.position, step);
 
-            //For Testing
+            //If the player didnt catch the notes
             if (transform.position == playerPos.position)
             {
+                Debug.Log("Missed note");
+                Handheld.Vibrate();
+                gameManager.takeDamage();
                 transform.position = storage.position;
-                touchable = false;
                 gameObject.GetComponentInParent<alive>().noteIsAlive = false;
+                touchable = false;
                 gameObject.GetComponent<Renderer>().material.shader = Shader.Find("Diffuse");
                 gameObject.SetActive(false);
+                
             }            
         }
 

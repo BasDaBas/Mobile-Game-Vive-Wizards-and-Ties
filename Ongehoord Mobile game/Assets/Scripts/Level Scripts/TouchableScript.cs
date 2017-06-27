@@ -21,8 +21,10 @@ namespace CompleteProject
 
         void OnTriggerEnter(Collider other)
         {
-            if (other.tag == "Notes")
+            if (other.tag == "Note")
             {
+                Debug.Log("Note is in range");
+
                 other.GetComponent<ObjectMovement>().touchable = true;
                 other.GetComponent<ObjectMovement>().SwapRenderer();
             }

@@ -8,6 +8,9 @@ public class PlayerPrefsManager : MonoBehaviour {
     const string MASTER_VOLUME_KEY = "master_volume";
     const string LEVEL_KEY = "level_unlocked_";
     const string UNLOCKABLE_KEY = "item unlocked";
+    const string EARPLUG_KEY = "earplug unlocked";
+
+    public static int Earplug = 0;
 
     public static void SetMasterVolume(float volume)
     {
@@ -30,6 +33,23 @@ public class PlayerPrefsManager : MonoBehaviour {
     public static float GetUnlockables()
     {
         return PlayerPrefs.GetFloat(UNLOCKABLE_KEY);
+    }
+
+    public static float GetEarplug()
+    {
+        return PlayerPrefs.GetFloat(EARPLUG_KEY);
+    }
+
+    public static void AddEarplugs()
+    {
+        Earplug++;
+        PlayerPrefs.SetFloat(EARPLUG_KEY, Earplug);
+    }
+
+    public static void RemoveEarplugs()
+    {
+        Earplug--;
+        PlayerPrefs.SetFloat(EARPLUG_KEY,Earplug);
     }
 
     /*public static void UnlockLevel(int level) {
